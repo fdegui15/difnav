@@ -35,7 +35,7 @@ func launchMediaInfo(fbyte []byte) []byte {
 	sfm := make(map[string]interface{}) // Category
 	sfmint := make(map[string]string)   // Element in the Category
 
-	arrstrg := strings.Split(sfstring, "\r") // Split on new line
+	arrstrg := strings.Split(sfstring, "\n") // Split on new line
 	var catstrg string                       // Category Name
 
 	for i := 0; i < len(arrstrg); i++ {
