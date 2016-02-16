@@ -100,7 +100,7 @@ func httpinspect() func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("*****************************************")
 		fmt.Println(msgWithDateProc(NProc, "httpinspect launched."))
 		fmt.Println(msgWithDateProc(NProc, "URL String: "+r.URL.String()+" & tools"+tools))
-		initTools(tools)
+		initTools(NProc, tools)
 		initToolsVersion()
 
 		var fn string //fn is the filename
@@ -129,7 +129,7 @@ func httpinspect() func(w http.ResponseWriter, r *http.Request) {
 				//EndProc(NProc)
 				return
 			}
-			output = inspectfile("/tmp/"+fn, nil)
+			output = inspectfile(NProc, "/tmp/"+fn, nil)
 
 		} else {
 			//used by the curl command line
@@ -156,7 +156,7 @@ func httpinspect() func(w http.ResponseWriter, r *http.Request) {
 				//EndProc(NProc)
 				return
 			}
-			output = inspectfile(outfile.Name(), nil)
+			output = inspectfile(NProc, outfile.Name(), nil)
 		}
 
 		w.Header().Set("Content-Type", mime)
@@ -192,7 +192,7 @@ func httpinspectpath() func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("*****************************************")
 		fmt.Println(msgWithDateProc(NProc, "httpinspectpath launched."))
 		fmt.Println(msgWithDateProc(NProc, "URL String: "+r.URL.String()+" & tools"+tools))
-		initTools(tools)
+		initTools(NProc, tools)
 		initToolsVersion()
 
 		path := r.URL.Path
@@ -216,9 +216,9 @@ func httpinspectpath() func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", mime)
 		if info.IsDir() {
 			output = nil
-			output = inspectdir(path)
+			output = inspectdir(NProc, path)
 		} else {
-			output = inspectfile(path, nil)
+			output = inspectfile(NProc, path, nil)
 		}
 
 		w.Write(output)
@@ -247,14 +247,14 @@ func httplocalinspect() func(w http.ResponseWriter, r *http.Request) {
 		/*if tools == "" {
 			tools = "hash-sf"
 		}*/
-		initTools(tools)
+		initTools(NProc, tools)
 		//initToolsVersion()
 		filename := os.Getenv("MOUNTDIR") + "/" + r.URL.Query().Get("file")
 		fmt.Println("*****************************************")
 		fmt.Println(msgWithDate("httplocalinspect : Inspect the Local file name:" + filename))
 
 		w.Header().Set("Content-Type", "application/json")
-		output := inspectfile(filename, nil)
+		output := inspectfile(NProc, filename, nil)
 		//output := []byte(filename + " - " + tools + "\n")
 		//t := time.Now()
 		fmt.Println(msgWithDate("httplocalinspect done"))
@@ -278,7 +278,7 @@ func httpgettoolsversion() func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(msgWithDateProc(NProc, "httpgettoolsversion launched"))
 		tools := r.URL.Query().Get("tools")
 		fmt.Println(msgWithDateProc(NProc, "httpgettoolsversion = tools:"+tools))
-		initTools(tools)
+		initTools(NProc, tools)
 		//initToolsVersion()
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(ExportToolsVersion())
@@ -304,7 +304,7 @@ func httpcbgettoolsversion() func(w http.ResponseWriter, r *http.Request) {
 		tools := r.URL.Query().Get("tools")
 		cbfunc := r.URL.Query().Get("callback")
 		fmt.Println(msgWithDateProc(NProc, "httpcbgettoolsversion = tools:"+tools+" callback: "+cbfunc))
-		initTools(tools)
+		initTools(NProc, tools)
 		//initToolsVersion()
 		w.Header().Set("Content-Type", "application/json")
 		str := cbfunc + "(" + string(ExportToolsVersion()) + ");"
@@ -321,7 +321,7 @@ const usage = `
 <html>
 <head>
 <title>inspectfile</title>
-<meta http-equiv="refresh" content="5; URL=/demo/demo.html">
+<meta http-equiv="refresh" content="1; URL=/demo/demo.html">
 </head>
 <body>
 </body>

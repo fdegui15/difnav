@@ -20,14 +20,14 @@ func init() {
 		fn:   launchExiftool}
 }
 
-func launchExiftool(fbyte []byte) []byte {
+func launchExiftool(id int, fbyte []byte) []byte {
 	toolFlag := "et"
 
 	f := make(map[string]interface{})
 	json.Unmarshal(fbyte, &f)
 	fn := fmt.Sprintf("%s", f["FileName"])
 
-	sfstring, _ := exectoolsCmd(toolFlag, fn)
+	sfstring, _ := exectoolsCmd(id, toolFlag, fn)
 	//Trim the bracket [] Only one file !!!
 	sfstring = strings.Trim(sfstring, " []")
 	sftbyte := []byte(sfstring)

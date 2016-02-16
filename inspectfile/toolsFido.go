@@ -20,7 +20,7 @@ func init() {
 		fn:   launchFido}
 }
 
-func launchFido(fbyte []byte) []byte {
+func launchFido(id int, fbyte []byte) []byte {
 	toolFlag := "fido"
 
 	f := make(map[string]interface{})
@@ -38,7 +38,7 @@ func launchFido(fbyte []byte) []byte {
 	}
 	var fo FidoOut
 
-	sfstring, _ := exectoolsCmd(toolFlag, fn)
+	sfstring, _ := exectoolsCmd(id, toolFlag, fn)
 
 	sft := strings.Split(sfstring, "§")
 

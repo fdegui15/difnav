@@ -16,12 +16,12 @@ import (
 var listtools []string
 
 type toolsStr struct {
-	Cmd    string              //Cmd line to launch the tool
-	Name   string              //Name of the tool
-	Args   []string            //Arguments used with the Cmd Line
-	Vers   []string            //Arguments used to return the Version Txt
-	VerTxt string              //The Version Text returned by the tool
-	fn     func([]byte) []byte //function to call to use the tool
+	Cmd    string                   //Cmd line to launch the tool
+	Name   string                   //Name of the tool
+	Args   []string                 //Arguments used with the Cmd Line
+	Vers   []string                 //Arguments used to return the Version Txt
+	VerTxt string                   //The Version Text returned by the tool
+	fn     func(int, []byte) []byte //function to call to use the tool
 }
 
 //mapping Flag => Tool
@@ -52,17 +52,17 @@ func settoolsVersion(toolFlag string) {
 }
 
 //Launch a command with args and the filename (the filename is optional for the version)
-func exectoolsCmd(toolname string, filename string) (string, error) {
-	fmt.Println(msgWithDate(toolname + " is launched..."))
+func exectoolsCmd(id int, toolname string, filename string) (string, error) {
+	fmt.Println(msgWithDateProc(id, toolname+" is launched..."))
 
 	//cmdargs := append(tools[toolname].Args, filename)
 	//cmdexec := exec.Command(tools[toolname].Cmd, cmdargs...)
 	//output, err := cmdexec.CombinedOutput()
 	output, err := execCmd(tools[toolname].Cmd, tools[toolname].Args, filename)
 	if err != nil {
-		fmt.Println(msgWithDate(toolname + " executed with ERROR : " + err.Error()))
+		fmt.Println(msgWithDateProc(id, toolname+" executed with ERROR : "+err.Error()))
 	} else {
-		fmt.Println(msgWithDate(toolname + " executed without issue."))
+		fmt.Println(msgWithDateProc(id, toolname+" executed without issue."))
 	}
 	return output, err
 }

@@ -21,16 +21,16 @@ func init() {
 		fn:   launchMediaInfo}
 }
 
-func launchMediaInfo(fbyte []byte) []byte {
+func launchMediaInfo(id int, fbyte []byte) []byte {
 	toolFlag := "mi"
 
 	f := make(map[string]interface{})
 	json.Unmarshal(fbyte, &f)
 	fn := fmt.Sprintf("%s", f["FileName"])
 
-	sfstring, _ := exectoolsCmd(toolFlag, fn)
+	sfstring, _ := exectoolsCmd(id, toolFlag, fn)
 
-	fmt.Println("mediainfo: Output=" + sfstring)
+	//fmt.Println("mediainfo: Output=" + sfstring)
 
 	sfm := make(map[string]interface{}) // Category
 	sfmint := make(map[string]string)   // Element in the Category

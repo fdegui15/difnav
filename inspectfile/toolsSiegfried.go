@@ -16,14 +16,14 @@ func init() {
 		fn:   launchSiegfried}
 }
 
-func launchSiegfried(fbyte []byte) []byte {
+func launchSiegfried(id int, fbyte []byte) []byte {
 	toolFlag := "sf"
 
 	f := make(map[string]interface{})
 	json.Unmarshal(fbyte, &f)
 	fn := fmt.Sprintf("%s", f["FileName"])
 
-	sfstring, _ := exectoolsCmd(toolFlag, fn)
+	sfstring, _ := exectoolsCmd(id, toolFlag, fn)
 
 	sftbyte := []byte(sfstring)
 

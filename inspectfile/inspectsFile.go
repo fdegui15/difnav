@@ -26,8 +26,9 @@ var (
 	fltools = flag.String("tools", "", "includes the tools you want to use, if more than 2, it must be comma separated (hash,fido,sf,et,mi)")
 )
 
-func inspectfile(filename string, fbyte []byte) []byte {
+func inspectfile(id int, filename string, fbyte []byte) []byte {
 	type FileStr struct {
+		_ProcessId    int
 		FileName      string
 		FileShortName string `json:",omitempty"`
 		FileSize      int64  `json:",omitempty"`
@@ -40,6 +41,7 @@ func inspectfile(filename string, fbyte []byte) []byte {
 		FileSize:    -1,
 		FileExists:  false,
 		FileNotNull: false,
+		_ProcessId:  id,
 	}
 	shortnTab := strings.Split(f.FileName, "/")
 	f.FileShortName = shortnTab[len(shortnTab)-1]
@@ -49,11 +51,11 @@ func inspectfile(filename string, fbyte []byte) []byte {
 	if err != nil {
 		f.FileComments = "the file doesn't exist..."
 		fcurbyte, _ = json.MarshalIndent(f, "", "    ")
-		fmt.Printf(msgWithDate("inspectfile - the file doesn't exists:  " + filename))
+		fmt.Printf(msgWithDateProc(id, "inspectfile - the file doesn't exists:  "+filename))
 	} else if finfo.IsDir() {
 		f.FileComments = "this is a directory!!!"
 		fcurbyte, _ = json.MarshalIndent(f, "", "    ")
-		fmt.Println(msgWithDate("inspectfile - this is a directore: " + filename))
+		fmt.Println(msgWithDateProc(id, "inspectfile - this is a directore: "+filename))
 	} else {
 		// it's a file
 		f.FileSize = finfo.Size()
@@ -65,7 +67,7 @@ func inspectfile(filename string, fbyte []byte) []byte {
 
 		//execute the tool in the listtools
 		for _, toolflag := range listtools {
-			fcurbyte = tools[toolflag].fn(fcurbyte)
+			fcurbyte = tools[toolflag].fn(id, fcurbyte)
 		}
 	}
 	return append(fbyte, fcurbyte...)
@@ -74,21 +76,21 @@ func inspectfile(filename string, fbyte []byte) []byte {
 func walkdir(path string, f os.FileInfo, err error) error {
 	fmt.Printf("Visited: %s\n", path)
 	if f.IsDir() == false {
-		output = inspectfile(path, output)
+		output = inspectfile(-1, path, output) //How to pass ProcessId through filepath.Walk ???
 	}
 	return nil
 }
 
-func inspectdir(path string) []byte {
+func inspectdir(id int, path string) []byte {
 	err := filepath.Walk(path, walkdir)
 	if err != nil {
-		fmt.Printf(msgWithDate("Error in parsing directory: " + err.Error()))
+		fmt.Printf(msgWithDateProc(id, "Error in parsing directory: "+err.Error()))
 		return nil
 	}
 	return output
 }
 
-func initTools(sttools string) {
+func initTools(id int, sttools string) {
 	//Init listtools
 	var outst string
 	if sttools != "" {
@@ -105,7 +107,7 @@ func initTools(sttools string) {
 			outst += key + "-"
 		}
 	}
-	fmt.Println(msgWithDate("inittools: " + outst))
+	fmt.Println(msgWithDateProc(id, "inittools: "+outst))
 }
 
 func main() {
@@ -123,19 +125,19 @@ func main() {
 		return
 	}
 	if *fltools != "" {
-		initTools(*fltools)
+		initTools(0, *fltools)
 	}
 	if *dir {
 		if flag.NArg() != 1 {
 			fmt.Println("You must pass a directory name!!!")
 			return
 		}
-		inspectdir(flag.Arg(0))
+		inspectdir(0, flag.Arg(0))
 	} else if flag.NArg() != 1 {
 		fmt.Println("You must pass a file name in parameter!!!")
 		return
 	} else {
-		output = inspectfile(flag.Arg(0), nil)
+		output = inspectfile(0, flag.Arg(0), nil)
 	}
 	//output = inspectsfile("/media/sf_Temp/Benchmark.pptx", output)
 	fmt.Printf("Output: %s \n", output)

@@ -29,7 +29,7 @@ func init() {
 		fn:     launchHash}
 }
 
-func launchHash(fbyte []byte) []byte {
+func launchHash(id int, fbyte []byte) []byte {
 
 	toolName := "hash"
 
