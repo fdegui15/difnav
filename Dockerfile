@@ -14,7 +14,7 @@ RUN apt-get update && \
 # Installation of siegfried 
 # RUN apt-get install -y golang git
 RUN mkdir /home/go ;\
-	go get github.com/richardlehane/siegfried/cmd/sf ;\
+	go get github.com/richardlehane/siegfried/tree/master/cmd/sf ;\
 	sf -update 
 
 # Installation of Fido
