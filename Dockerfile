@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM ubuntu:16.04
 MAINTAINER fdeguilhen@gmail.com
 
 ENV PATH $PATH:/home/go/bin
@@ -8,13 +8,13 @@ ENV MOUNTDIR /opt/dv
 # All the installation here
 # Reducing the image size with --no-install-recommends and rm /var/lib/apt/lists
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends ca-certificates golang git python mediainfo exiftool && \
+	apt-get install -y --no-install-recommends ca-certificates golang git python mediainfo exiftool locales && \
 	rm -rf /var/lib/apt/lists
 
 # Installation of siegfried 
 # RUN apt-get install -y golang git
 RUN mkdir /home/go ;\
-	go get github.com/richardlehane/siegfried/tree/master/cmd/sf ;\
+	go get github.com/richardlehane/siegfried/cmd/sf ;\
 	sf -update 
 
 # Installation of Fido
