@@ -13,6 +13,7 @@ RUN apt-get update && \
 
 # Installation of siegfried 
 # RUN apt-get install -y golang git
+# Update in Siegfried V1.7.8 - December 2nd 2018
 RUN mkdir /home/go ;\
 	go get github.com/richardlehane/siegfried/cmd/sf ;\
 	sf -update 
