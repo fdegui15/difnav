@@ -4,6 +4,7 @@ MAINTAINER fdeguilhen@gmail.com
 ENV PATH $PATH:/home/go/bin
 ENV GOPATH /home/go
 ENV MOUNTDIR /opt/dv
+ENV SFVERS 1.7.8
 
 # All the installation here
 # Reducing the image size with --no-install-recommends and rm /var/lib/apt/lists
