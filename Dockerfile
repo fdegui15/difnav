@@ -4,6 +4,7 @@ MAINTAINER fdeguilhen@gmail.com
 ENV PATH $PATH:/home/go/bin
 ENV GOPATH /home/go
 ENV MOUNTDIR /opt/dv
+# Update in Siegfried V1.7.8 - February 12th 2017
 ENV SFVERS 1.7.8
 
 # All the installation here
@@ -14,7 +15,6 @@ RUN apt-get update && \
 
 # Installation of siegfried 
 # RUN apt-get install -y golang git
-# Update in Siegfried V1.7.8 - December 2nd 2018
 RUN mkdir /home/go ;\
 	go get github.com/richardlehane/siegfried/cmd/sf ;\
 	sf -update 
